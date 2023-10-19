@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import "./fileUpload.css";
 import axios from "axios";
+import SendImage from "./SendImage'";
 
 const FileUpload = () => {
     ////при захвате файла и наведении на область срабатывает
@@ -39,30 +40,11 @@ const FileUpload = () => {
 
     useEffect(() => {
         checkInputImage();
-        console.log(selectedFile===undefined)
-        if(selectedFile===undefined) document.getElementById("image-preview").src = "";
+        if(selectedFile===undefined) {
+            document.getElementById("image-preview").src = "";
+        }
     }, [selectedFile])
 
-    ////////axios post///////////////////
-    const [responsee, setResponse] = useState("");
-    const uploadImage = (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        axios.post('http://localhost:8001/img_object_detection_to_json', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        })
-            .then(response => {
-                alert('фотография обрабатывается...')
-                setResponse(response.data)
-                console.log(responsee);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
     return (
         <div className="main-block">
             <label htmlFor="images" className="drop_container" id="dropcontainer">
@@ -79,10 +61,7 @@ const FileUpload = () => {
             </div>
             {selectedFile &&
             <div>
-                <button className="btn-todetermine"
-                onClick={()=>{uploadImage(selectedFile)}}>
-                    find out the breed
-                </button>
+                <SendImage file={selectedFile} nameFile={selectedFile.name}></SendImage>
             </div>}
         </div>
     );
